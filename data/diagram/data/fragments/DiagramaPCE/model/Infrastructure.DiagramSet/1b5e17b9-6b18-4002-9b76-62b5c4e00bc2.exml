@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="DiagramaPCE" version="4">
+  <OBJECT>
+    <ID name="DiagramaPCE" mc="Infrastructure.DiagramSet" uid="1b5e17b9-6b18-4002-9b76-62b5c4e00bc2"/>
+    <PID name="DiagramaPCE" mc="Standard.Project" uid="c870c8f8-06a2-4f40-8255-b22fd01bc6e3"/>
+    <ATTRIBUTES>
+      <ATT name="Name"><![CDATA[DiagramaPCE]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>
