@@ -92,7 +92,8 @@ class AnamneseTransformer(GeneralTransformer):
             'EMAP direita (mm)': 'emap_direita',
             'EMAP esquerda (mm)': 'emap_esquerda',
             'Força de preensão manual DIREITA (kgf)': 'forca_preencao_manual_direita',
-            'Força de preensão manual ESQUERDA (kgf)': 'forca_preencao_manual_esquerda'
+            'Força de preensão manual ESQUERDA (kgf)': 'forca_preencao_manual_esquerda',
+            'Descrever as metas:': 'metas'
         }
     
 class RetornoTransformer(GeneralTransformer):
@@ -100,31 +101,7 @@ class RetornoTransformer(GeneralTransformer):
         
         #! pd column: sql column
         self.sql_mapping: dict = {
-            'Escolaridade': 'escolaridade',
-            'Período em que trabalha/estuda': 'periodo_estudo',
-            'Há possibilidade de realizar lanches no local de estudo?': 'lanche_estudo',
-            'Período em que trabalha': 'periodo_trabalho',
-            'Há a possibilidade de realizar lanches no local de trabalho?': 'lanche_trabalho',
-            'Profissão': 'profissao',
-            'Renda familiar': 'renda_familiar',
-            'Quantas pessoas moram no domicílio (contando com você)': 'num_pessoas_domicilio',
-            'Motivo pela procura do ambulatório': 'motivo',
-            'Apresenta alguma doença?': 'apresenta_doenca',
-            'Frequência de evacuação': 'frequencia_evacuacao',
-            'Consistência da evacuação:': 'consistencia_evacuacao',
-            'Pratica atividade física regularmente?': 'pratica_atv_fisica',
-            'Se sim: qual atividade, frequência semanal e duração? (intensidade,peso)': 'atv_fisica',
-            'Café da manhã:': 'cafe_da_manha',
-            'Lanche da manhã (se houver):': 'lanche_da_manha',
-            'Almoço:': 'almoco',
-            'Lanche da tarde:': 'lanche_da_tarde',
-            'Jantar:': 'jantar',
-            'Ceia (se houver):': 'ceia',
-            'Peso atual (kg)': 'peso_atual',
-            'Estatura (m)': 'estatura',
-            'IMC (kg/m²)': 'imc',
-            'Dê uma nota à sua saciedade após as refeições': 'nota_saciedade_pos_refeicoes',
-            'Como você classifica a sua satisfação pessoal (qualidade e quantidade da refeição) após realizar as refeições': 'nota_humor_pos_refeicoes',
+            
         }
         
         
