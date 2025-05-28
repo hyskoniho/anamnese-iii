@@ -103,9 +103,6 @@ class RetornoTransformer(GeneralTransformer):
         self.sql_mapping: dict = {
             
         }
-        
-        
-    
     
 # CREATE TABLE retorno (
 #     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,

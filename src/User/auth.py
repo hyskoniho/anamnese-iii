@@ -1,6 +1,7 @@
 import requests, re, hashlib
+from typing import Tuple
 
-class Login(requests.Session):
+class MoodleAgent(requests.Session):
     def __init__(self, username: str, password: str) -> None:
         super().__init__()
         
@@ -19,9 +20,13 @@ class Login(requests.Session):
         """Login to the website and return True if successful."""
         url: str = 'https://moodle.unisantos.br'
 
-        response: requests.Response = requests.get(url)
+        response: requests.Response = requests.get(url, allow_redirects=True)
         
         login_page: str = self.get(response.url).text
+        with open('login_page.html', 'w', encoding='utf-8') as f:
+            f.write(login_page)
+        
+        
         end: str = login_page.split('id="loginForm"')[1].split('action="')[1].split('"')[0]
 
         login_data: dict = {
@@ -36,10 +41,26 @@ class Login(requests.Session):
         auth_response: requests.Response = self.post(fr"{url}/auth/saml2/sp/saml2-acs.php/moodle.unisantos.br", data=auth)
 
         if auth_response.ok:
-            sesskey: str = self.get(f"{url}/my/").text.split('"sesskey":"')[1].split('"')[0]
-            id: str = self.get(f"{url}/user/profile.php").text.split('"contextInstanceId":')[1].split(',')[0]
+            return True
+            # sesskey: str = self.get(f"{url}/my/").text.split('"sesskey":"')[1].split('"')[0]
+            # id: str = self.get(f"{url}/user/profile.php").text.split('"contextInstanceId":')[1].split(',')[0]
             
-            return sesskey, id
+            # if sesskey and id:
+            #     self.headers.update({
+            #         'Cookie': f'sesskey={sesskey}; MOODLEID_{id}=1; MOODLEID_UNISANTOS=1',
+            #         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+            #     })
+                
+            #     return True
+    
+        else:
+            return False
+        
+    def get_full_name(self) -> str:
+        """Get the full name of the user."""
+        response: requests.Response = self.get(f"https://moodle.unisantos.br/user/profile.php")
+        full_name: str = response.text.split('<title>')[1].split(':')[0].strip()
+        return full_name
         
     @staticmethod
     def is_valid_username(username: str) -> bool:

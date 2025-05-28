@@ -1,41 +1,63 @@
+# Built-in imports
+import logging, os, sys, traceback, json, time
+from typing import List, Optional, Tuple, Any, Dict
+from getpass import getpass
+
+# Third-party imports
 import pandas as pd
-import logging
-from Models.models import ColumnMapping, ExcelData
+
+# Local imports
 from Transformer import *
-from Database.db import Database
-from typing import List
+from Database import Database
+from GUI import HomeGUI, ProcessingGUI
+from User import User
 
 logging.basicConfig(level=logging.INFO)
 
-if __name__ == "__main__":
-    data = r"C:\Users\Arklok\Documents\Projetos\FACULDADE\anamnese\repository\data\tbl\dados_reais.xlsx"
+def authenticate_user(max_retries: int = 3) -> None:
+    print("Por favor insira suas credenciais para acessar o sistema.")
     
-    df = pd.read_excel(data)
+    for retry in range(max_retries):
+        try:
+            username: str = input("Usuário (e-mail institucional): ")
+            password: str = getpass("Senha: ")
+            
+            user: User = User(username, password)
+            
+        except Exception as e:
+            print(''.join(traceback.format_exception(*sys.exc_info())))
+            print("\n")
+            print(f"Falha na autenticação. Tentativa {retry + 1} de {max_retries}.")
+            
+            if retry < max_retries - 1:
+                print("Tente novamente.\n")
+            else:
+                print("\nNúmero máximo de tentativas atingido. Encerrando o programa.")
+                sys.exit(1)
+        
+        else:
+            return
+
+def main() -> None:
+    # authenticate_user()
+    # print("\nAutenticação bem-sucedida. Iniciando o sistema...")
     
-    tr = PacienteTransformer(df)
-    print("\n"*10)
-    print(tr.n_dataframe)
-    print("\n"*2)
-    tr.remove_n_row(267)
-    print(tr.n_dataframe)
+    # h: HomeGUI = HomeGUI()
+    # h.run()
+    # FILE_PATH = h.selected_file_path
+    FILE_PATH = r"C:\Users\Arklok\Documents\Projetos\FACULDADE\anamnese\repository\data\tbl\dados_reais.xlsx"
+    
+    print(FILE_PATH)
+    if FILE_PATH:
+        main_dataframe: pd.DataFrame = pd.read_excel(FILE_PATH, engine='openpyxl')
+        
+        p1: ProcessingGUI = ProcessingGUI(
+            transformer=PacienteTransformer(main_dataframe.copy(deep=True)),
+            step="Pacientes"
+        )
+        p1.run()
+        ...
+    
 
-    # column_mappings: List[ColumnMapping] = [
-    #     ColumnMapping(column_name='name', sql_type='TEXT'),
-    #     ColumnMapping(column_name='age', sql_type='INTEGER'),
-    #     ColumnMapping(column_name='email', sql_type='TEXT'),
-    # ]
-
-    # excel_file_path: str = 'data.xlsx'
-    # df: pd.DataFrame = pd.read_excel(excel_file_path)
-
-    # excel_to_sql: ExcelToSQL = ExcelToSQL(column_mappings)
-    # missing_columns: List[str] = excel_to_sql.validate_columns(df)
-
-    # if not missing_columns:
-    #     indexes_to_insert: List[int] = [0, 1, 2]  # Example indexes
-    #     queries: List[str] = excel_to_sql.generate_insert_query(df, indexes_to_insert)
-
-    #     db: Database = Database('your_database.db')
-    #     db.insert_queries(queries)
-    # else:
-    #     logging.error("Cannot proceed due to missing columns.")
+if __name__ == '__main__':
+    main()
