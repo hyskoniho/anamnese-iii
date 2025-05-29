@@ -7,7 +7,7 @@ class ActionKit:
 
     def get_file_path(self) -> None:
         """Open a file dialog to select a file and return its path."""
-        self.selected_file_path = filedialog.askopenfilename(filetypes=self.allowed_file_types)
+        self.selected_file_path = filedialog.askopenfilename()
         self.entry_1.insert(0, self.selected_file_path)
         
     def validate_file_path(self, file_path: str) -> None:
@@ -23,21 +23,4 @@ class ActionKit:
                 message="Por favor, selecione um arquivo válido Excel."
             )
             self.entry_1.delete(0, 'end')
-    
-    # def open_settings(self):
-    #     """Open the settings dialog."""
-    #     self.gui.open_settings()
-
-    # def open_about(self):
-    #     """Open the about dialog."""
-    #     self.gui.open_about()
-
-    # def open_help(self):
-    #     """Open the help dialog."""
-    #     self.gui.open_help()
-
-    # def exit_application(self):
-    #     """Exit the application."""
-    #     self.gui.exit_application()
-        
     

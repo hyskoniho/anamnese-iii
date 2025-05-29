@@ -25,6 +25,8 @@ class ProcessingGUI(ActionKit):
         self.window = Tk()
         self.window.geometry("960x540")
         self.window.configure(bg="#FAFDFF")
+        
+        self.window.title("Clínica - Transformação de Dados")
 
         self.canvas = Canvas(
             self.window,
@@ -43,7 +45,7 @@ class ProcessingGUI(ActionKit):
             image=self.button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
+            command=lambda: self.interrupt(),
             relief="flat"
         )
         self.button_1.place(
@@ -59,7 +61,7 @@ class ProcessingGUI(ActionKit):
             image=self.button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_2 clicked"),
+            command=lambda: self.finish(),
             relief="flat"
         )
         self.button_2.place(
@@ -75,7 +77,7 @@ class ProcessingGUI(ActionKit):
             image=self.button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_3 clicked"),
+            command=lambda: self.swipe_left(self.n_selected_row_index),
             relief="flat"
         )
         self.button_3.place(
@@ -91,7 +93,7 @@ class ProcessingGUI(ActionKit):
             image=self.button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_4 clicked"),
+            command=lambda: self.swipe_right(self.i_selected_row_index),
             relief="flat"
         )
         self.button_4.place(
@@ -144,6 +146,7 @@ class ProcessingGUI(ActionKit):
         img4_y = 270.0 - img4_height // 2
 
         # --- DataFrame display over image_2 (n_dataframe) ---
+        self.n_selected_row_index = None
         self.df_frame_n = self.ttk.Frame(self.window)
         self.df_frame_n.place(x=img2_x, y=img2_y, width=img2_width, height=img2_height)
         self.df_tree_n = self.ttk.Treeview(self.df_frame_n, show='headings')
@@ -152,16 +155,18 @@ class ProcessingGUI(ActionKit):
         for col in df_n.columns:
             self.df_tree_n.heading(col, text=col)
             self.df_tree_n.column(col, width=100, anchor='center')
-        for _, row in df_n.iterrows():
-            self.df_tree_n.insert("", "end", values=list(row))
+        for idx, row in df_n.iterrows():
+            self.df_tree_n.insert("", "end", iid=str(idx), values=list(row))
         vsb_n = self.ttk.Scrollbar(self.df_frame_n, orient="vertical", command=self.df_tree_n.yview)
         hsb_n = self.ttk.Scrollbar(self.df_frame_n, orient="horizontal", command=self.df_tree_n.xview)
         self.df_tree_n.configure(yscrollcommand=vsb_n.set, xscrollcommand=hsb_n.set)
         vsb_n.pack(side='right', fill='y')
         hsb_n.pack(side='bottom', fill='x')
         self.df_tree_n.pack(side='left', fill='both', expand=True)
+        self.df_tree_n.bind('<<TreeviewSelect>>', self._on_n_row_select)
 
         # --- DataFrame display over image_4 (i_dataframe) ---
+        self.i_selected_row_index = None
         self.df_frame_i = self.ttk.Frame(self.window)
         self.df_frame_i.place(x=img4_x, y=img4_y, width=img4_width, height=img4_height)
         self.df_tree_i = self.ttk.Treeview(self.df_frame_i, show='headings')
@@ -170,14 +175,15 @@ class ProcessingGUI(ActionKit):
         for col in df_i.columns:
             self.df_tree_i.heading(col, text=col)
             self.df_tree_i.column(col, width=100, anchor='center')
-        for _, row in df_i.iterrows():
-            self.df_tree_i.insert("", "end", values=list(row))
+        for idx, row in df_i.iterrows():
+            self.df_tree_i.insert("", "end", iid=str(idx), values=list(row))
         vsb_i = self.ttk.Scrollbar(self.df_frame_i, orient="vertical", command=self.df_tree_i.yview)
         hsb_i = self.ttk.Scrollbar(self.df_frame_i, orient="horizontal", command=self.df_tree_i.xview)
         self.df_tree_i.configure(yscrollcommand=vsb_i.set, xscrollcommand=hsb_i.set)
         vsb_i.pack(side='right', fill='y')
         hsb_i.pack(side='bottom', fill='x')
         self.df_tree_i.pack(side='left', fill='both', expand=True)
+        self.df_tree_i.bind('<<TreeviewSelect>>', self._on_i_row_select)
 
         self.canvas.create_text(
             23.0,
@@ -212,6 +218,20 @@ class ProcessingGUI(ActionKit):
 
     def run(self):
         self.window.mainloop()
+
+    def _on_n_row_select(self, event):
+        selected = self.df_tree_n.selection()
+        if selected:
+            self.n_selected_row_index = int(selected[0])
+        else:
+            self.n_selected_row_index = None
+
+    def _on_i_row_select(self, event):
+        selected = self.df_tree_i.selection()
+        if selected:
+            self.i_selected_row_index = int(selected[0])
+        else:
+            self.i_selected_row_index = None
 
 # To use from another package:
 # from src.GUI.Processing.gui import ProcessingGUI

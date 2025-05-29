@@ -35,7 +35,7 @@ class Utils:
             return 'NULL'
     
     @staticmethod
-    def generate_sql_insert(mapping: dict, dataframe: pd.DataFrame, batch_size: int = 500) ->  list[str]:
+    def generate_sql_insert(mapping: dict, dataframe: pd.DataFrame, table_name: str, batch_size: int = 500) ->  list[str]:
         """
         Generate SQL insert statements for the given mapping and dataframe.
         :param mapping: The mapping of column names to table names.
@@ -49,6 +49,6 @@ class Utils:
             batch = dataframe.iloc[i:i + batch_size]
             for _, row in batch.iterrows():
                 columns = ', '.join([f"\"{mapping[col]}\"" for col in row.index])
-                values = ', '.join([f"'{str(value)}'" if isinstance(value, str) else str(value) for value in row.values])
-                sql_statements.append(f"INSERT INTO {mapping['table_name']} ({columns}) VALUES ({values});")
+                values = ', '.join([f"'{str(value).replace("\n", "")}'" if isinstance(value, str) else str(value) for value in row.values])
+                sql_statements.append(f"INSERT INTO {table_name} ({columns}) VALUES ({values});")
         return sql_statements

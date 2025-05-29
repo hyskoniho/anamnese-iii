@@ -20,7 +20,7 @@ class HomeGUI(ActionKit):
         self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"C:\Users\Arklok\Documents\Projetos\FACULDADE\anamnese\repository\src\GUI\Home\assets\frame0")
 
         self.window = Tk()
-        self.window.title("Anamnese - Home")
+        self.window.title("Clínica - Home")
         self.window.geometry("600x500")
         self.window.configure(bg="#FAFDFF")
 
