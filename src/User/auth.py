@@ -23,9 +23,6 @@ class MoodleAgent(requests.Session):
         response: requests.Response = requests.get(url, allow_redirects=True)
         
         login_page: str = self.get(response.url).text
-        with open('login_page.html', 'w', encoding='utf-8') as f:
-            f.write(login_page)
-        
         
         end: str = login_page.split('id="loginForm"')[1].split('action="')[1].split('"')[0]
 
@@ -42,16 +39,6 @@ class MoodleAgent(requests.Session):
 
         if auth_response.ok:
             return True
-            # sesskey: str = self.get(f"{url}/my/").text.split('"sesskey":"')[1].split('"')[0]
-            # id: str = self.get(f"{url}/user/profile.php").text.split('"contextInstanceId":')[1].split(',')[0]
-            
-            # if sesskey and id:
-            #     self.headers.update({
-            #         'Cookie': f'sesskey={sesskey}; MOODLEID_{id}=1; MOODLEID_UNISANTOS=1',
-            #         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-            #     })
-                
-            #     return True
     
         else:
             return False

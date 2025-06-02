@@ -334,37 +334,7 @@ class RetornoTransformer(GeneralTransformer):
         self.sql_mapping: dict = {
             
         }
-    
-# CREATE TABLE retorno (
-#     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-#     paciente_id INT NOT NULL,
-#     paciente_nome VARCHAR(60) NOT NULL,
-#     usuario_id INT NOT NULL,
-#     usuario_nome VARCHAR(60) NOT NULL,
-#     tipo_formulario VARCHAR(10) DEFAULT 'Retorno' NOT NULL,
-#     retorno INT NOT NULL,
-#     metas_ultima_consulta TEXT NULL,
-#     comentarios_observacao TEXT NULL,
-#     metas_foram_cumpridas ENUM('sim', 'nao', 'mais_ou_menos') NULL,
-#     desempenho_cumprimento_metas TINYINT NULL,
-#     motivo_assinalado_cumprimento_metas TEXT NULL,
-#     como_sentiu_mudanca_habitos TEXT NULL,
-#     adaptacao_mudanca_habitos TEXT NULL,
-#     motivos_dificuldade_adaptacao TEXT NULL,
-#     sente_precisa_melhorar_alimentacao TEXT NULL,
-#     habito_intestinal TEXT NULL,
-#     atv_fisica ENUM('manteve_o_que_ja_fazia', 'aumentei_a_frequencia_intensidade', 'ainda_nao_consegui_praticar', 'nao_iniciei_e_nao_pretendo_iniciar') NULL,
-#     metas_proximo_retorno TEXT NULL,
-#     peso_atual FLOAT NULL,
-#     imc FLOAT NULL,
-#     circunferencia_abdominal FLOAT NULL,
-#     valores_bioimpedancia TEXT NULL,
-#     observacoes_bioimpedancia TEXT NULL,
-#     criado_em DATETIME DEFAULT (CURRENT_TIMESTAMP) NULL,
-#     FOREIGN KEY (paciente_id) REFERENCES paciente(id),
-#     FOREIGN KEY (usuario_id) REFERENCES usuario(id)
-# );
-    
+        
 class PacienteTransformer(GeneralTransformer):
     def __init__(self, dataframe: pd.DataFrame) -> None:
         #! pd column: sql column

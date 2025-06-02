@@ -88,6 +88,7 @@ def main() -> None:
             
             # ! Query 2
             insert_anamneses_queries
+            
             messagebox.showinfo(
                 title="Processamento Concluído",
                 message="O processamento dos dados foi concluído com sucesso. As consultas SQL foram geradas e estão prontas para serem executadas."
